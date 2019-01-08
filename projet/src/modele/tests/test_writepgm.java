@@ -3,7 +3,7 @@ package modele.tests;
 import modele.seamCarving.SeamCarving;
 
 public class test_writepgm {
-    private static String FILENAME = "testPerso.pgm";
+    private static String FILENAME = "projet/src/ressources/testPerso.pgm";
 
     public static void main(String[] args) {
         test();
