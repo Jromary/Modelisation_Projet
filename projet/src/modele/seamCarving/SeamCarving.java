@@ -1,5 +1,9 @@
 package modele.seamCarving;
 
+import modele.graph.Edge;
+import modele.graph.Graph;
+import modele.graph.GraphArrayList;
+
 import java.util.ArrayList;
 import java.io.*;
 import java.util.*;
@@ -47,7 +51,7 @@ public class SeamCarving
 
             int hauteur = image.length;
             int largeur = image[0].length;
-            System.out.println("Recuperation de la hauteur : " + hauteur + ", et de la largueur : " + largeur);
+            //System.out.println("Recuperation de la hauteur : " + hauteur + ", et de la largueur : " + largeur);
 
             buffer.write("P2");
             buffer.newLine();
@@ -57,10 +61,8 @@ public class SeamCarving
             buffer.newLine();
             for (int[] row : image) {
                 for (int pixel : row) {
-                    System.out.print(pixel + " ");
                     buffer.write(pixel + " ");
                 }
-                System.out.println("");
                 buffer.newLine();
             }
             buffer.close();
@@ -73,6 +75,71 @@ public class SeamCarving
         }
         return true;
 	}
+
+	public int[][] interest(int[][] image){
+		int hauteur = image.length;
+		int largeur = image[0].length;
+		int[][] matrice = new int[hauteur][largeur];
+
+
+		for (int j = 0; j < hauteur; j++) {
+			for (int i = 0; i < largeur; i++) {
+				if (i == 0){ // si on est tout a gauche
+					if (i == largeur - 1){ // si il n'y a qu'une collone
+						matrice[j][i] = image[j][i];
+					}else { // sinon on est bien a gauche
+						matrice[j][i] = Math.abs(image[j][i] - image[j][i+1]);
+					}
+				}else {
+					if (i == largeur - 1){ // si on est tout a droite
+						matrice[j][i] = Math.abs(image[j][i] - image[j][i-1]);
+					}else { // cas normal au milieu de la matrice
+						matrice[j][i] = Math.abs(image[j][i] - (image[j][i-1] + image[j][i+1])/2);
+					}
+				}
+			}
+		}
+
+		return matrice;
+	}
+
+    public Graph tograph(int[][] matriceInterest){
+        int hauteur = matriceInterest.length;
+        int largeur = matriceInterest[0].length;
+        GraphArrayList graph = new GraphArrayList((hauteur * largeur) + 2);
+
+        for (int j = 0; j < hauteur-1; j++) {
+            for (int i = 0; i < largeur; i++) {
+                System.out.println("neux: " + ((j * largeur) + i));
+                if (i == 0){ // si on est tout a gauche
+                    if (i == largeur - 1){ // si il n'y a qu'une collone
+                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i, matriceInterest[j][i]));
+                    }else { // sinon on est bien a gauche
+                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i + 1, matriceInterest[j][i]));
+                    }
+                }else {
+                    if (i == largeur - 1){ // si on est tout a droite
+                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i - 1, matriceInterest[j][i]));
+                    }else { // cas normal au milieu de la matrice
+                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i + 1, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i - 1, matriceInterest[j][i]));
+                    }
+                }
+            }
+        }
+        System.out.println("premiere partie de tograph done");
+        for (int i = 0; i < largeur; i++) {
+            graph.addEdge(new Edge(((hauteur - 1) * largeur) + i, (hauteur * largeur), matriceInterest[hauteur - 1][i]));
+            graph.addEdge(new Edge((hauteur * largeur) + 1, i, matriceInterest[0][i]));
+        }
+
+        return graph;
+    }
+
+
 
 
 }

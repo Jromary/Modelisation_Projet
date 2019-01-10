@@ -2,7 +2,7 @@ package modele.graph;
 
 import java.io.*;
 
-abstract class Graph
+public abstract class Graph
 {
 	public abstract int vertices();
 
