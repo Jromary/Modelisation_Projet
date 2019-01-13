@@ -10,6 +10,17 @@ import java.util.*;
 public class SeamCarving
 {
 
+    public String toStringMatrice(int[][] matrice){
+        StringBuilder sb = new StringBuilder();
+        for (int[] row : matrice) {
+            for (int cell : row) {
+                sb.append(cell + " ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
 	public static int[][] readpgm(String fn)
 	{
 		try {
@@ -110,36 +121,95 @@ public class SeamCarving
 
         for (int j = 0; j < hauteur-1; j++) {
             for (int i = 0; i < largeur; i++) {
-                System.out.println("neux: " + ((j * largeur) + i));
                 if (i == 0){ // si on est tout a gauche
                     if (i == largeur - 1){ // si il n'y a qu'une collone
-                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i + 1, ((j + 1) * largeur) + i + 1, matriceInterest[j][i]));
                     }else { // sinon on est bien a gauche
-                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i, matriceInterest[j][i]));
-                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i + 1, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i + 1, ((j + 1) * largeur) + i + 1, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i + 1, ((j + 1) * largeur) + i + 1 + 1, matriceInterest[j][i]));
                     }
                 }else {
                     if (i == largeur - 1){ // si on est tout a droite
-                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i, matriceInterest[j][i]));
-                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i - 1, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i + 1, ((j + 1) * largeur) + i + 1, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i + 1, ((j + 1) * largeur) + i - 1 + 1, matriceInterest[j][i]));
                     }else { // cas normal au milieu de la matrice
-                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i, matriceInterest[j][i]));
-                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i + 1, matriceInterest[j][i]));
-                        graph.addEdge(new Edge((j * largeur) + i, ((j + 1) * largeur) + i - 1, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i + 1, ((j + 1) * largeur) + i + 1, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i + 1, ((j + 1) * largeur) + i + 1 + 1, matriceInterest[j][i]));
+                        graph.addEdge(new Edge((j * largeur) + i + 1, ((j + 1) * largeur) + i - 1 + 1, matriceInterest[j][i]));
                     }
                 }
             }
         }
-        System.out.println("premiere partie de tograph done");
         for (int i = 0; i < largeur; i++) {
-            graph.addEdge(new Edge(((hauteur - 1) * largeur) + i, (hauteur * largeur), matriceInterest[hauteur - 1][i]));
-            graph.addEdge(new Edge((hauteur * largeur) + 1, i, matriceInterest[0][i]));
+            graph.addEdge(new Edge(((hauteur - 1) * largeur) + i, (hauteur * largeur) + 1, matriceInterest[hauteur - 1][i]));
+            graph.addEdge(new Edge(0, i + 1, 0));
         }
 
         return graph;
     }
 
 
+    ArrayList<Integer> ordre = new ArrayList<>();
+    ArrayList<Integer> visite = new ArrayList<>();
+    public ArrayList<Integer> tritopo(Graph graph){
+        int nb_vertices = graph.vertices();
+        for (int u = 0; u <nb_vertices; u++) {
+            if (!visite.contains(u)){
+                dfs(graph, u);
+            }
+        }
+        Collections.reverse(ordre);
+        return ordre;
+    }
 
+    private void dfs(Graph graph, int u) {
+        visite.add(u);
+        for(Edge edge : graph.next(u)){
+            if (!visite.contains(edge.to)){
+                dfs(graph, edge.to);
+            }
+        }
+        ordre.add(u);
+    }
+
+    public ArrayList<Integer> Bellman(Graph graph, int s, int t, ArrayList<Integer> order){
+        int[] T = new int[graph.vertices()];
+        T[s] = 0;
+        for (int sommet : order) {
+            int val = Integer.MAX_VALUE;
+            for(Edge edge : graph.prev(sommet)){
+                val = Math.min(val, T[edge.from] + edge.cost);
+            }
+            T[sommet] = val;
+        }
+        for (int elem :
+                T) {
+            System.out.print(elem + " ");
+        }
+        System.out.println("");
+        return backTrack(graph, T, s, t);
+    }
+
+    private ArrayList<Integer> backTrack(Graph graph, int[] T, int s, int t) {
+        ArrayList<Integer> path = new ArrayList<>(0);
+        if (s == t){
+            path.add(s);
+            return path;
+        }
+        int prev = -1;
+        for (Edge edge : graph.prev(t)) {
+            if (T[t] - edge.cost == T[edge.from]){
+                prev = edge.from;
+            }
+        }
+        if (prev == -1){
+            return path;
+        }
+        path =  backTrack(graph, T, s, prev);
+        path.add(t);
+        return path;
+        
+        
+    }
 
 }
