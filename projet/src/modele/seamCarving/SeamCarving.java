@@ -141,7 +141,7 @@ public class SeamCarving
             }
         }
         for (int i = 0; i < largeur; i++) {
-            graph.addEdge(new Edge(((hauteur - 1) * largeur) + i, (hauteur * largeur) + 1, matriceInterest[hauteur - 1][i]));
+            graph.addEdge(new Edge(((hauteur - 1) * largeur) + i + 1, (hauteur * largeur) + 1, matriceInterest[hauteur - 1][i]));
             graph.addEdge(new Edge(0, i + 1, 0));
         }
 
@@ -174,16 +174,22 @@ public class SeamCarving
 
     public ArrayList<Integer> Bellman(Graph graph, int s, int t, ArrayList<Integer> order){
         int[] T = new int[graph.vertices()];
+
+        for (int i = 0; i <T.length; i++) {
+            T[i] = Integer.MAX_VALUE;
+        }
         T[s] = 0;
         for (int sommet : order) {
-            int val = Integer.MAX_VALUE;
+//            int val = Integer.MAX_VALUE;
             for(Edge edge : graph.prev(sommet)){
-                val = Math.min(val, T[edge.from] + edge.cost);
+                if(T[edge.from] != Integer.MAX_VALUE) {
+                    T[sommet] = Math.min(T[sommet], T[edge.from] + edge.cost);
+                }
+//                System.out.println(val);
             }
-            T[sommet] = val;
+//            T[sommet] = val;
         }
-        for (int elem :
-                T) {
+        for (int elem : T) {
             System.out.print(elem + " ");
         }
         System.out.println("");
