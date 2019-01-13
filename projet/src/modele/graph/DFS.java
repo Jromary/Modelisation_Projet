@@ -45,6 +45,7 @@ class DFS
 		boolean visited[] = new boolean[g.vertices()];
 		stack.push(s);
 		while (!stack.empty()){
+            System.out.println("Taille : " + stack.size());
 			int u = stack.pop();
 			if (!visited[u]){
 				visited[u] = true;
@@ -108,8 +109,11 @@ class DFS
 		g.addEdge(new Edge(3, 5, 1));
 		g.addEdge(new Edge(5, 1, 1));
 		botched_dfs1(g, 0);
+		System.out.println("==============");
 		botched_dfs2(g, 0);
+		System.out.println("==============");
 		botched_dfs3(g, 0);
+		System.out.println("==============");
 		botched_dfs4(g, 0);
 
 
