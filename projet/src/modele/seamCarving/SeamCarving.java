@@ -150,22 +150,24 @@ public class SeamCarving
 
 
     ArrayList<Integer> ordre = new ArrayList<>();
-    ArrayList<Integer> visite = new ArrayList<>();
+    boolean[] visite;
     public ArrayList<Integer> tritopo(Graph graph){
         int nb_vertices = graph.vertices();
-        for (int u = 0; u <nb_vertices; u++) {
-            if (!visite.contains(u)){
-                dfs(graph, u);
-            }
-        }
+        visite = new boolean[nb_vertices];
+        dfs(graph, 0);
+//        for (int u = 0; u <nb_vertices; u++) {
+//            if (!visite.contains(u)){
+//                dfs(graph, u);
+//            }
+//        }
         Collections.reverse(ordre);
         return ordre;
     }
 
     private void dfs(Graph graph, int u) {
-        visite.add(u);
+        visite[u] = true;
         for(Edge edge : graph.next(u)){
-            if (!visite.contains(edge.to)){
+            if (!visite[edge.to]){
                 dfs(graph, edge.to);
             }
         }
@@ -190,9 +192,9 @@ public class SeamCarving
 //            T[sommet] = val;
         }
         for (int elem : T) {
-            System.out.print(elem + " ");
+//            System.out.print(elem + " ");
         }
-        System.out.println("");
+//        System.out.println("");
         return backTrack(graph, T, s, t);
     }
 
@@ -214,8 +216,30 @@ public class SeamCarving
         path =  backTrack(graph, T, s, prev);
         path.add(t);
         return path;
-        
-        
     }
 
+    public int[][] removeColumn(int[][] matrice, ArrayList<Integer> listToRemove){
+        int hauteur = matrice.length;
+        int largeur = matrice[0].length;
+        int[][] matriceRes = new int[hauteur][largeur - 1];
+
+        for (int i = 0; i < hauteur; i++) {
+            // on recupere le numero du pixel a retirer
+            int id = listToRemove.get(i+1);
+            boolean overlap = false;
+            for (int j = 0; j < largeur - 1; j++) {
+                // on test si le pixel en cour est le bon (id / da +5454) = 0
+                if((id - (i * largeur)) + j + 1 == 0){
+                    overlap = true;
+                }
+                // on le retire et on pense a decaler tout les rexste
+                if (!overlap){
+                    matriceRes[i][j] = matrice[i][j];
+                }else {
+                    matriceRes[i][j] = matrice[i][j + 1];
+                }
+            }
+        }
+        return matriceRes;
+    }
 }
