@@ -27,7 +27,7 @@ public class Main {
             int hauteur = image.length;
             int largeur = image[0].length;
 
-            System.out.println(hauteur + " " + largeur);
+//            System.out.println(hauteur + " " + largeur);
 
             int[][] interet;
             interet = sc.interest(image);
@@ -35,14 +35,15 @@ public class Main {
             Graph graph;
             graph = sc.tograph(interet);
 
-            graph.writeFile("projet/src/ressources/testPerso.txt");
+//            graph.writeFile("projet/src/ressources/testPerso.txt");
 
             ArrayList<Integer> triTopo;
             triTopo = sc.tritopo(graph);
 
             ArrayList<Integer> path;
-            System.out.println(hauteur + " " + largeur + " " + (hauteur*largeur+1));
-            path = sc.Bellman(graph, 0, (hauteur*largeur+1), triTopo);
+//            System.out.println(hauteur + " " + largeur + " " + (hauteur*largeur+1));
+//            System.out.println("nombre de sommet : " + graph.vertices());
+            path = sc.Bellman(graph, 0, graph.vertices() - 1, triTopo);
 
             int[][] imageRes = sc.removeColumn(image, path);
 //            image = new int[imageRes.length][imageRes[0].length];

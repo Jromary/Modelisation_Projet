@@ -149,9 +149,10 @@ public class SeamCarving
     }
 
 
-    ArrayList<Integer> ordre = new ArrayList<>();
+    ArrayList<Integer> ordre;
     boolean[] visite;
     public ArrayList<Integer> tritopo(Graph graph){
+        ordre = new ArrayList<>();
         int nb_vertices = graph.vertices();
         visite = new boolean[nb_vertices];
         dfs(graph, 0);
@@ -219,25 +220,37 @@ public class SeamCarving
     }
 
     public int[][] removeColumn(int[][] matrice, ArrayList<Integer> listToRemove){
+        int pixelParcorue = 0;
         int hauteur = matrice.length;
         int largeur = matrice[0].length;
         int[][] matriceRes = new int[hauteur][largeur - 1];
-
+        System.out.println(listToRemove);
         for (int i = 0; i < hauteur; i++) {
             // on recupere le numero du pixel a retirer
             int id = listToRemove.get(i+1);
-            boolean overlap = false;
+//            boolean overlap = false;
             for (int j = 0; j < largeur - 1; j++) {
+                pixelParcorue++;
+
+                if (pixelParcorue >= id){
+                    matriceRes[i][j] = matrice[i][j + 1];
+                }else{
+                    matriceRes[i][j] = matrice[i][j];
+                }
+
+                /**
                 // on test si le pixel en cour est le bon (id / da +5454) = 0
-                if((id - (i * largeur)) + j + 1 == 0){
+//                System.out.println("" + (id - (i * largeur)) + j + 1);
+                if((i*largeur) + j + 1 == id){
+                    System.out.println("pipop");
                     overlap = true;
                 }
                 // on le retire et on pense a decaler tout les rexste
-                if (!overlap){
+                if (overlap){
                     matriceRes[i][j] = matrice[i][j];
                 }else {
                     matriceRes[i][j] = matrice[i][j + 1];
-                }
+                }**/
             }
         }
         return matriceRes;
