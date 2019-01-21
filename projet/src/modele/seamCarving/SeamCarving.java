@@ -252,6 +252,7 @@ public class SeamCarving
                     matriceRes[i][j] = matrice[i][j + 1];
                 }**/
             }
+            pixelParcorue++;
         }
         return matriceRes;
     }

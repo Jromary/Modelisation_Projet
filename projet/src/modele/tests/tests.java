@@ -25,9 +25,12 @@ public class tests {
     private static void testAll() {
         SeamCarving sc = new SeamCarving();
         long startTime;
+        long startTimeG;
         long endTime;
+        long endTimeG;
         long duration;
         startTime = java.lang.System.currentTimeMillis();
+        startTimeG = java.lang.System.currentTimeMillis();
         int[][] image;
         image = sc.readpgm(FILENAME_TOREAD_PGM);
         int hauteur = image.length;
@@ -72,8 +75,11 @@ public class tests {
         startTime = java.lang.System.currentTimeMillis();
         sc.writepgm(imageRes, FILENAME_TOWRITE_PGM);
         endTime = java.lang.System.currentTimeMillis();
+        endTimeG = java.lang.System.currentTimeMillis();
         duration = (endTime - startTime);
         System.out.println("Ecriture de l'image : " + duration + " ms");
+        duration = (endTimeG - startTimeG);
+        System.out.println("Temps global : " + duration + " ms");
     }
 
     private static void testRemove() {
