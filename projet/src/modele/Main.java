@@ -14,6 +14,7 @@ public class Main {
         int iteration;
         if (args.length != 3 ) {
             System.out.println("Usage : java -jar SeamCarving <File In> <Nb column to delete> <File Out>");
+            return;
         }
         file_in = args[0];
         file_out = args[2];

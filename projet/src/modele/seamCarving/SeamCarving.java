@@ -45,10 +45,14 @@ public class SeamCarving
 				count++;
 			}
 			return im;
-		}
+		}catch(IOException e){
+            System.out.println("File " + fn + " does not exist");
+            return null;
+        }
 
 		catch(Throwable t) {
-			t.printStackTrace(System.err) ;
+//			t.printStackTrace(System.err) ;
+            System.out.println("File must be in same directory as jar");
 			return null;
 		}
 	}
@@ -224,7 +228,7 @@ public class SeamCarving
         int hauteur = matrice.length;
         int largeur = matrice[0].length;
         int[][] matriceRes = new int[hauteur][largeur - 1];
-        System.out.println(listToRemove);
+//        System.out.println(listToRemove);
         for (int i = 0; i < hauteur; i++) {
             // on recupere le numero du pixel a retirer
             int id = listToRemove.get(i+1);
