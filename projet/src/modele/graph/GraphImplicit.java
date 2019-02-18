@@ -52,7 +52,7 @@ public class GraphImplicit extends Graph{
 
 		//on max est min pour pas depasser a droite ou a gauche
 		edges.add(new Edge(v,(posY+1)*w + Integer.max(0,posX-1), interest[posY][posX]));
-		edges.add(new Edge(v,(posY+1)*w + Integer.max(0,posX), interest[posY][posX]));
+		edges.add(new Edge(v,(posY+1)*w + posX, interest[posY][posX]));
 		edges.add(new Edge(v,(posY+1)*w + Integer.min(w-1,posX+1), interest[posY][posX]));
 
 		return edges;
@@ -87,9 +87,6 @@ public class GraphImplicit extends Graph{
 		edges.add(new Edge((posY-1)*w + Integer.max(0, posX -1), v, interest[posY-1][Integer.max(0, posX -1)]));
 		edges.add(new Edge((posY-1)*w + posX, v, interest[posY-1][posX]));
 		edges.add(new Edge((posY-1)*w + Integer.max(w-1, posX+1), v, interest[posY-1][Integer.min(w-1, posX+1)]));
-
-
-
 
 		return edges;
 	}

@@ -27,5 +27,22 @@ Ajout de l'image venus2.ascii.pgm (Image source dans src/ressources/)
 
 Ajout de l'image result.pgm (Image resultat dans src/ressources/)
 
+## Reponse aux questions:
+1.  C'est un parcours en largeur sur lequel on a remplacer la file par une pile, 
+ce changement ne sufit pas a produire un parcours en profondeur iteratif.
+
+2.  Cest un parcours en largeur, cela ne correspond donc pas a un parcours en 
+profondeur.
+
+3.  On ne met le sommet a visité que a la sortie de celui-ci ce qui fait que l'on
+peut rentrer dans le sommet plusieurs fois, ce qui fait exploser la pile, par exemple
+un graph K100 entraine une pile > 1000 ; ce n'est donc pas ce que l'on veut
+obtenir.
+
+4.  A chaque neud, on test les Aretes si on trouve un sommet non visité on y va
+a la sortie du neud choisi on retest toutes les arétes dans l'ordre, ce qui fait qu'on traite
+trop de fois toutes les arrétes. Exemple: 1 sommet relié a 99 autre, la première arréte testé
+sera tester 99 fois, ce qui est beaucoup trop.
+
 ## Sources
 https://people.sc.fsu.edu/~jburkardt/data/pgma/pgma.html
