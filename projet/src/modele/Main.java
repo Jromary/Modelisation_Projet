@@ -34,17 +34,22 @@ public class Main {
             interet = sc.interest(image);
 
             Graph graph;
-            graph = sc.tograph(interet);
+            //graph = sc.tograph(interet);
+            graph = sc.tographImplicite(interet);
 
 //            graph.writeFile("projet/src/ressources/testPerso.txt");
 
             ArrayList<Integer> triTopo;
             triTopo = sc.tritopo(graph);
+            //System.out.println("trie topo: " + triTopo);
 
             ArrayList<Integer> path;
 //            System.out.println(hauteur + " " + largeur + " " + (hauteur*largeur+1));
 //            System.out.println("nombre de sommet : " + graph.vertices());
-            path = sc.Bellman(graph, 0, graph.vertices() - 1, triTopo);
+
+            //path = sc.Bellman(graph, 0, graph.vertices() - 1, triTopo);//pour graph normal
+            path = sc.Bellman(graph,graph.vertices()-2, graph.vertices()-1, triTopo); //pour graph implicite
+            //System.out.println("Path : " + path);
 
             int[][] imageRes = sc.removeColumn(image, path);
 //            image = new int[imageRes.length][imageRes[0].length];

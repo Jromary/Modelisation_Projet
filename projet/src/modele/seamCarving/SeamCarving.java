@@ -3,6 +3,7 @@ package modele.seamCarving;
 import modele.graph.Edge;
 import modele.graph.Graph;
 import modele.graph.GraphArrayList;
+import modele.graph.GraphImplicit;
 
 import java.util.ArrayList;
 import java.io.*;
@@ -118,6 +119,10 @@ public class SeamCarving
 		return matrice;
 	}
 
+	public Graph tographImplicite(int[][] matriceInterest){
+        return new GraphImplicit(matriceInterest, matriceInterest[1].length, matriceInterest.length);
+    }
+
     public Graph tograph(int[][] matriceInterest){
         int hauteur = matriceInterest.length;
         int largeur = matriceInterest[0].length;
@@ -158,13 +163,10 @@ public class SeamCarving
     public ArrayList<Integer> tritopo(Graph graph){
         ordre = new ArrayList<>();
         int nb_vertices = graph.vertices();
-        visite = new boolean[nb_vertices];
-        dfs(graph, 0);
-//        for (int u = 0; u <nb_vertices; u++) {
-//            if (!visite.contains(u)){
-//                dfs(graph, u);
-//            }
-//        }
+        //System.out.println(nb_vertices);
+        visite = new boolean[nb_vertices+2];
+        //dfs(graph, 0);
+        dfs_iteratif(graph, graph.vertices()-2);
         Collections.reverse(ordre);
         return ordre;
     }
@@ -180,6 +182,8 @@ public class SeamCarving
     }
 
     public ArrayList<Integer> Bellman(Graph graph, int s, int t, ArrayList<Integer> order){
+        //System.out.println("coucou 2: " + s + " | " + t);
+
         int[] T = new int[graph.vertices()];
 
         for (int i = 0; i <T.length; i++) {
@@ -187,8 +191,9 @@ public class SeamCarving
         }
         T[s] = 0;
         for (int sommet : order) {
-//            int val = Integer.MAX_VALUE;
+            //System.out.println("traitement de : " + sommet);
             for(Edge edge : graph.prev(sommet)){
+                //System.out.println("y a des prev");
                 if(T[edge.from] != Integer.MAX_VALUE) {
                     T[sommet] = Math.min(T[sommet], T[edge.from] + edge.cost);
                 }
@@ -196,14 +201,15 @@ public class SeamCarving
             }
 //            T[sommet] = val;
         }
-        for (int elem : T) {
+//        for (int elem : T) {
 //            System.out.print(elem + " ");
-        }
+//        }
 //        System.out.println("");
         return backTrack(graph, T, s, t);
     }
 
     private ArrayList<Integer> backTrack(Graph graph, int[] T, int s, int t) {
+        //System.out.println("coucou 1: " + s + " | " + t);
         ArrayList<Integer> path = new ArrayList<>(0);
         if (s == t){
             path.add(s);
@@ -241,23 +247,37 @@ public class SeamCarving
                 }else{
                     matriceRes[i][j] = matrice[i][j];
                 }
-
-                /**
-                // on test si le pixel en cour est le bon (id / da +5454) = 0
-//                System.out.println("" + (id - (i * largeur)) + j + 1);
-                if((i*largeur) + j + 1 == id){
-                    System.out.println("pipop");
-                    overlap = true;
-                }
-                // on le retire et on pense a decaler tout les rexste
-                if (overlap){
-                    matriceRes[i][j] = matrice[i][j];
-                }else {
-                    matriceRes[i][j] = matrice[i][j + 1];
-                }**/
             }
             pixelParcorue++;
         }
         return matriceRes;
+    }
+
+    private void dfs_iteratif(Graph graph, int u){
+
+        Stack listeSommet = new Stack();
+        Stack listeVoisin = new Stack();
+        listeSommet.push(u);
+        listeVoisin.push(graph.next(u).iterator());
+
+        int sommetCourant;
+        int voisinTester;
+        Iterator<Edge> voisinCourant;
+        while(!listeSommet.isEmpty() && !listeVoisin.isEmpty()){
+            sommetCourant = (int) listeSommet.peek();
+            voisinCourant = (Iterator<Edge>) listeVoisin.peek();
+            if (voisinCourant.hasNext()){
+                voisinTester = voisinCourant.next().to;
+                if (!visite[voisinTester]){
+                    visite[voisinTester] = true;
+                    listeSommet.push(voisinTester);
+                    listeVoisin.push(graph.next(voisinTester).iterator());
+                }
+            }else {
+                listeSommet.pop();
+                listeVoisin.pop();
+                ordre.add(sommetCourant);
+            }
+        }
     }
 }
