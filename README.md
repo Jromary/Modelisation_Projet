@@ -31,6 +31,7 @@ Ajout de l'image venus2.ascii.pgm (Image source dans src/ressources/)
 
 Ajout de l'image result.pgm (Image resultat dans src/ressources/)
 
+# 2eme partie
 ## Reponse aux questions:
 1.  C'est un parcours en largeur sur lequel on a remplacer la file par une pile, 
 ce changement ne sufit pas a produire un parcours en profondeur iteratif.
@@ -49,8 +50,24 @@ trop de fois toutes les arrétes. Exemple: 1 sommet relié a 99 autre, la premi�
 sera tester 99 fois, ce qui est beaucoup trop.
 
 ## Amelorations effectué
-* mise en place du graph implicite
-* mise en plase de la fonction d'energie avant dans le graph implicite
+- mise en place du graph implicite
+- mise en plase de la fonction d'energie avant dans le graph implicite
+- suppression des collones et des ligne
+
+## utilisation du programme
+La classe main contient le main du programme c'est celui-ci qui doit etre executer
+il prend 4 parametres:
+
+- le fichier d'entrée
+- le nombre de collones a suprimmer
+- le nombre de ligne a suprimmer
+- le fichier de sortie
+
+## Image ajouté
+Ajout de l'image venus2.ascii.pgm (Image source dans src/ressources/)
+
+Ajout de l'image result.pgm (Image resultat dans src/ressources/) correspondant 
+a l'execution du programme sur venus2.ascii.pgm en enlevant 50 ligne et 50 collones.
 
 ## Sources
 https://people.sc.fsu.edu/~jburkardt/data/pgma/pgma.html
