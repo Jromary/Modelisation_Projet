@@ -92,6 +92,47 @@ public class SeamCarving
         return true;
 	}
 
+	public int[][] rotateLeft(int[][] image){
+        int hauteur = image.length;
+        int largeur = image[0].length;
+        int[][] matrice = new int[largeur][hauteur];
+        for (int i = 0; i < hauteur; i++) {
+            for (int j = 0; j < largeur; j++) {
+                matrice[j][i] = image[i][j];
+            }
+        }
+        // retournement de ligne
+        int[][] matriceBis = new int[largeur][hauteur];
+        for (int i = 0; i < matrice.length; i++) {
+            for (int j = 0; j < matrice[0].length; j++) {
+                matriceBis[i][j] = matrice[matrice.length - 1 - i][j];
+            }
+        }
+        return matriceBis;
+    }
+
+
+    public int[][] rotateRight(int[][] image){
+        int hauteur = image.length;
+        int largeur = image[0].length;
+        int[][] matrice = new int[largeur][hauteur];
+        // trasposé
+        for (int i = 0; i < hauteur; i++) {
+            for (int j = 0; j < largeur; j++) {
+                matrice[j][i] = image[i][j];
+            }
+        }
+        // retournement de ligne
+        int[][] matriceBis = new int[largeur][hauteur];
+        for (int i = 0; i < matrice.length; i++) {
+            for (int j = 0; j < matrice[0].length; j++) {
+                matriceBis[i][j] = matrice[i][matrice[0].length-1-j];
+            }
+        }
+        return matriceBis;
+    }
+
+
 	public int[][] interest(int[][] image){
 		int hauteur = image.length;
 		int largeur = image[0].length;

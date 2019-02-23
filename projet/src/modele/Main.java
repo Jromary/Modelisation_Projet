@@ -11,20 +11,22 @@ public class Main {
     public static void main(String[] args) {
         String file_in;
         String file_out;
-        int iteration;
-        if (args.length != 3 ) {
-            System.out.println("Usage : java -jar SeamCarving <File In> <Nb column to delete> <File Out>");
+        int iterationcol;
+        int iterationlig;
+        if (args.length != 4 ) {
+            System.out.println("Usage : java -jar SeamCarving <File In> <Nb column to delete> <Nb ligne to delete> <File Out>");
             return;
         }
         file_in = args[0];
-        file_out = args[2];
-        iteration = Integer.parseInt(args[1]);
+        file_out = args[3];
+        iterationcol = Integer.parseInt(args[1]);
+        iterationlig = Integer.parseInt(args[2]);
 
-        System.out.println(file_in + " | " + file_out + " | " + iteration);
+        System.out.println(file_in + " | " + file_out + " | " + iterationcol + " | " + iterationlig);
         SeamCarving sc = new SeamCarving();
         int[][] image;
         image = sc.readpgm(file_in);
-        for (int i = 0; i < iteration; i++) {
+        for (int i = 0; i < iterationcol; i++) {
             int hauteur = image.length;
             int largeur = image[0].length;
 
@@ -55,6 +57,30 @@ public class Main {
 //            image = new int[imageRes.length][imageRes[0].length];
             image = imageRes;
         }
+        if (iterationlig > 0){
+            image = sc.rotateLeft(image);
+            for (int i = 0; i < iterationlig; i++) {
+                int hauteur = image.length;
+                int largeur = image[0].length;
+                int[][] interet;
+                interet = sc.interest(image);
+
+                Graph graph;
+                graph = sc.tographImplicite(interet);
+
+                ArrayList<Integer> triTopo;
+                triTopo = sc.tritopo(graph);
+
+                ArrayList<Integer> path;
+                path = sc.Bellman(graph,graph.vertices()-2, graph.vertices()-1, triTopo); //pour graph implicite
+                int[][] imageRes = sc.removeColumn(image, path);
+                image = imageRes;
+            }
+            image = sc.rotateRight(image);
+        }
+
+
+
         sc.writepgm(image, file_out);
     }
 }
